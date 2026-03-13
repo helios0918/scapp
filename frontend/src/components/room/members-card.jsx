@@ -8,6 +8,14 @@ export function MembersCard({
                                 onClose,
                                 isMobile = false,
                             }) {
+
+    const getInitials = (name) => {
+        if (!name) return "?";
+        const parts = name.trim().split(" ");
+        if (parts.length === 1) return parts[0][0].toUpperCase();
+        return (parts[0][0] + parts[1][0]).toUpperCase();
+    };
+
     return (
         <div className="flex flex-col h-full border-l bg-white">
 
@@ -40,10 +48,10 @@ export function MembersCard({
                         >
                             <div className="flex items-center gap-3">
 
-                                {/* Avatar */}
+                                {/* Avatar with Name Initials */}
                                 <div className="relative">
-                                    <div className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center text-sm font-semibold">
-                                        {member.name?.charAt(0).toUpperCase()}
+                                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 text-white flex items-center justify-center text-sm font-semibold">
+                                        {getInitials(member.name)}
                                     </div>
 
                                     {/* Online indicator */}
