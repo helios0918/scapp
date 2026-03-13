@@ -1,4 +1,4 @@
-const fallbackApi = "http://localhost:8080";
+const fallbackApi = "https://scapp-64qg.onrender.com";
 const rawApiUrl = (import.meta.env?.VITE_API_BASE_URL) || fallbackApi;
 
 export const API_BASE_URL = rawApiUrl.replace(/\/+$/, "");
