@@ -1,0 +1,24 @@
+[build]
+  # This tells Netlify where to look for your package.json and build scripts
+  base = "frontend"
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Ensures the build doesn't fail on minor warnings
+  CI = "false"
+  NODE_VERSION = "20"
+
+[[redirects]]
+  # This fixes the 404 error when refreshing pages like /dashboard or /profile
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  # Helps prevent common CSP or loading issues you might see in logs
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "same-origin"
