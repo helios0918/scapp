@@ -9,6 +9,7 @@ export function MembersCard({
                                 isMobile = false,
                             }) {
 
+    // Generate initials (Teams style)
     const getInitials = (name) => {
         if (!name) return "?";
         const parts = name.trim().split(" ");
@@ -16,12 +17,32 @@ export function MembersCard({
         return (parts[0][0] + parts[1][0]).toUpperCase();
     };
 
+    // Generate consistent avatar color
+    const getAvatarColor = (email) => {
+        const colors = [
+            "bg-blue-500",
+            "bg-indigo-500",
+            "bg-purple-500",
+            "bg-pink-500",
+            "bg-green-500",
+            "bg-orange-500",
+            "bg-teal-500",
+        ];
+
+        let hash = 0;
+        for (let i = 0; i < email.length; i++) {
+            hash = email.charCodeAt(i) + ((hash << 5) - hash);
+        }
+
+        return colors[Math.abs(hash) % colors.length];
+    };
+
     return (
         <div className="flex flex-col h-full border-l bg-white">
 
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b">
-                <h2 className="text-sm font-semibold tracking-wide text-gray-700">
+                <h2 className="text-sm font-semibold text-gray-700">
                     Participants
                 </h2>
 
@@ -35,8 +56,9 @@ export function MembersCard({
                 )}
             </div>
 
-            {/* Members List */}
-            <div className="flex-1 overflow-y-auto p-3 space-y-2">
+            {/* Members */}
+            <div className="flex-1 overflow-y-auto p-2">
+
                 {members.map((member) => {
                     const isOnline = onlineUsers.has(member.email);
                     const isCurrentUser = member.email === currentUserEmail;
@@ -44,17 +66,23 @@ export function MembersCard({
                     return (
                         <div
                             key={member.email}
-                            className="flex items-center justify-between p-2 rounded-xl hover:bg-gray-50 transition"
+                            className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50 transition"
                         >
+
                             <div className="flex items-center gap-3">
 
-                                {/* Avatar with Name Initials */}
+                                {/* Avatar */}
                                 <div className="relative">
-                                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 text-white flex items-center justify-center text-sm font-semibold">
+                                    <div
+                                        className={cn(
+                                            "w-9 h-9 rounded-full text-white flex items-center justify-center text-sm font-semibold",
+                                            getAvatarColor(member.email)
+                                        )}
+                                    >
                                         {getInitials(member.name)}
                                     </div>
 
-                                    {/* Online indicator */}
+                                    {/* Online dot */}
                                     <span
                                         className={cn(
                                             "absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white",
@@ -63,7 +91,7 @@ export function MembersCard({
                                     />
                                 </div>
 
-                                {/* Name + Email */}
+                                {/* Name */}
                                 <div className="flex flex-col">
                   <span className="text-sm font-medium text-gray-800">
                     {member.name}
@@ -82,15 +110,17 @@ export function MembersCard({
                             {/* Status */}
                             <span
                                 className={cn(
-                                    "text-[11px] font-medium",
+                                    "text-xs font-medium",
                                     isOnline ? "text-green-600" : "text-gray-400"
                                 )}
                             >
                 {isOnline ? "Online" : "Offline"}
               </span>
+
                         </div>
                     );
                 })}
+
             </div>
         </div>
     );
